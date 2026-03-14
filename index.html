@@ -2,170 +2,313 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Shepherd's First Website</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shepherd's Arsenal Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      margin: 0;
-      padding: 40px 20px;
-      font-family: Arial, sans-serif;
-      color: white;
-      background-color: #1565C0;
-      background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><text y='70' font-size='65'>⚽</text></svg>");
-      background-repeat: repeat;
+      font-family: 'Inter', Arial, sans-serif;
+      background: #0a0e1a;
+      color: #e8e8e8;
+      min-height: 100vh;
     }
 
-    .content {
-      background-color: rgba(10, 60, 150, 0.82);
-      border-radius: 16px;
-      padding: 30px 40px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    h1 {
-      font-size: 52px;
+    /* ── HERO BANNER ── */
+    .hero {
+      background: linear-gradient(135deg, #6b0004 0%, #EF0107 40%, #c20006 100%);
+      padding: 60px 20px 50px;
       text-align: center;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 4px solid #9C824A;
     }
 
-    h2 {
-      font-size: 28px;
-      border-bottom: 2px solid rgba(255,255,255,0.4);
-      padding-bottom: 8px;
-      margin-top: 36px;
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><text y='70' font-size='65' opacity='0.06'>⚽</text></svg>") repeat;
     }
 
-    p {
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 900;
+      color: white;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .hero .subtitle {
       font-size: 18px;
-      line-height: 1.8;
+      color: rgba(255,255,255,0.85);
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+      font-weight: 400;
+    }
+
+    .hero .standing {
+      display: inline-block;
+      background: #9C824A;
+      color: white;
+      padding: 6px 20px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 16px;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    /* ── ABOUT SECTION ── */
+    .about-card {
+      background: linear-gradient(145deg, #141a2e, #1a2240);
+      border: 1px solid rgba(156,130,74,0.2);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 30px;
+      font-size: 16px;
+      line-height: 1.9;
+      color: #c8c8d0;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+      margin: 36px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #EF0107;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── FIXTURES TABLE ── */
+    .fixtures-card {
+      background: linear-gradient(145deg, #141a2e, #1a2240);
+      border: 1px solid rgba(156,130,74,0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 30px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 12px;
-      font-size: 16px;
+      font-size: 15px;
     }
 
     th {
-      background-color: rgba(255, 255, 255, 0.2);
-      padding: 10px 14px;
+      background: rgba(239,1,7,0.15);
+      color: #EF0107;
+      padding: 14px 18px;
       text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
     td {
-      padding: 9px 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.15);
+      padding: 13px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: #c8c8d0;
     }
 
     tr:hover td {
-      background-color: rgba(255,255,255,0.1);
+      background: rgba(239,1,7,0.06);
     }
 
-    .badge {
-      display: inline-block;
-      background: #EF4444;
-      color: white;
-      border-radius: 999px;
-      padding: 2px 10px;
+    .home-tag {
+      color: #4ade80;
+      font-weight: 700;
       font-size: 13px;
-      font-weight: bold;
-      margin-left: 8px;
+    }
+    .away-tag {
+      color: #9C824A;
+      font-weight: 700;
+      font-size: 13px;
     }
 
-    .home { color: #86efac; font-weight: bold; }
-    .away { color: #fcd34d; font-weight: bold; }
+    /* ── SQUAD GRID ── */
+    .position-group {
+      margin-bottom: 20px;
+    }
+
+    .position-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #EF0107;
+      margin: 20px 0 12px;
+      padding-left: 4px;
+    }
+
+    .squad-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .player-card {
+      background: linear-gradient(145deg, #141a2e, #1a2240);
+      border: 1px solid rgba(156,130,74,0.12);
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: white;
+      transition: all 0.2s ease;
+    }
+
+    .player-card:hover {
+      border-color: #EF0107;
+      background: linear-gradient(145deg, #1a2240, #222a4a);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(239,1,7,0.15);
+    }
+
+    .player-card img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: top;
+      background: #1e2644;
+      border: 2px solid rgba(156,130,74,0.3);
+    }
+
+    .player-card .info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .player-card .name {
+      font-weight: 700;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .player-card .number {
+      font-size: 12px;
+      color: #9C824A;
+      font-weight: 600;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 30px;
+      color: #555;
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
   </style>
 </head>
 <body>
 
-  <div class="content">
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Shepherds First Website</h1>
+    <p class="subtitle">The English Premier League &middot; Arsenal FC &middot; The Gunners 🔴⚪</p>
+    <div class="standing">🏆 1ST PLACE &middot; PREMIER LEAGUE 2025/26</div>
+  </div>
 
-    <h1>⚽ Shepherds First Website ⚽</h1>
+  <div class="main">
 
-    <p>
+    <!-- ABOUT -->
+    <div class="about-card">
       The English Premier League is the top soccer league in England and one of the most
-      exciting leagues in the whole world! My favorite team is Arsenal, also known as
+      exciting leagues in the whole world! My favorite team is <strong style="color:#EF0107;">Arsenal</strong>, also known as
       the Gunners. Arsenal plays at the Emirates Stadium in London and has some of the
       most passionate fans anywhere. They are famous for playing beautiful, attacking
-      soccer. This season Arsenal are sitting <strong>1st place</strong> in the Premier League —
-      Up the Gunners! 🔴⚪
-    </p>
+      soccer. This season Arsenal are sitting <strong style="color:#9C824A;">1st place</strong> in the Premier League —
+      Up the Gunners!
+    </div>
 
-    <!-- NEXT 5 FIXTURES -->
-    <h2>📅 Next 5 Premier League Matches</h2>
-    <table>
-      <tr>
-        <th>Date</th>
-        <th>Opponent</th>
-        <th>Where</th>
-      </tr>
-      <tr>
-        <td>Sat, 14 Mar 2026</td>
-        <td>Everton</td>
-        <td class="home">🏠 Home</td>
-      </tr>
-      <tr>
-        <td>Sat, 21 Mar 2026</td>
-        <td>Wolverhampton Wanderers</td>
-        <td class="away">✈️ Away</td>
-      </tr>
-      <tr>
-        <td>Sat, 11 Apr 2026</td>
-        <td>Bournemouth</td>
-        <td class="home">🏠 Home</td>
-      </tr>
-      <tr>
-        <td>Sat, 18 Apr 2026</td>
-        <td>Manchester City</td>
-        <td class="away">✈️ Away</td>
-      </tr>
-      <tr>
-        <td>Sat, 25 Apr 2026</td>
-        <td>Newcastle United</td>
-        <td class="home">🏠 Home</td>
-      </tr>
-    </table>
+    <!-- FIXTURES -->
+    <div class="section-header">📅 Next 5 Matches</div>
+    <div class="fixtures-card">
+      <table>
+        <tr><th>Date</th><th>Opponent</th><th>Venue</th></tr>
+        <tr><td>Sat, 14 Mar 2026</td><td>Everton</td><td class="home-tag">HOME</td></tr>
+        <tr><td>Sat, 21 Mar 2026</td><td>Wolverhampton</td><td class="away-tag">AWAY</td></tr>
+        <tr><td>Sat, 11 Apr 2026</td><td>Bournemouth</td><td class="home-tag">HOME</td></tr>
+        <tr><td>Sat, 18 Apr 2026</td><td>Manchester City</td><td class="away-tag">AWAY</td></tr>
+        <tr><td>Sat, 25 Apr 2026</td><td>Newcastle United</td><td class="home-tag">HOME</td></tr>
+      </table>
+    </div>
 
-    <!-- SQUAD ROSTER -->
-    <h2>👕 Arsenal Squad 2025/26</h2>
-    <table>
-      <tr>
-        <th>#</th>
-        <th>Player</th>
-        <th>Position</th>
-      </tr>
-      <tr><td>1</td><td><a href="raya.html" style="color:#fcd34d; font-weight:bold;">David Raya</a></td><td>Goalkeeper</td></tr>
-      <tr><td>13</td><td><a href="kepa.html" style="color:#fcd34d; font-weight:bold;">Kepa Arrizabalaga</a></td><td>Goalkeeper</td></tr>
-      <tr><td>31</td><td><a href="hein.html" style="color:#fcd34d; font-weight:bold;">Karl Hein</a></td><td>Goalkeeper</td></tr>
-      <tr><td>2</td><td><a href="saliba.html" style="color:#fcd34d; font-weight:bold;">William Saliba</a></td><td>Defender</td></tr>
-      <tr><td>3</td><td><a href="mosquera.html" style="color:#fcd34d; font-weight:bold;">Cristhian Mosquera</a></td><td>Defender</td></tr>
-      <tr><td>4</td><td><a href="white.html" style="color:#fcd34d; font-weight:bold;">Ben White</a></td><td>Defender</td></tr>
-      <tr><td>6</td><td><a href="gabriel.html" style="color:#fcd34d; font-weight:bold;">Gabriel</a></td><td>Defender</td></tr>
-      <tr><td>12</td><td><a href="timber.html" style="color:#fcd34d; font-weight:bold;">Jurrien Timber</a></td><td>Defender</td></tr>
-      <tr><td>15</td><td><a href="kiwior.html" style="color:#fcd34d; font-weight:bold;">Jakub Kiwior</a></td><td>Defender</td></tr>
-      <tr><td>17</td><td><a href="zinchenko.html" style="color:#fcd34d; font-weight:bold;">Oleksandr Zinchenko</a></td><td>Defender</td></tr>
-      <tr><td>33</td><td><a href="calafiori.html" style="color:#fcd34d; font-weight:bold;">Riccardo Calafiori</a></td><td>Defender</td></tr>
-      <tr><td>49</td><td><a href="lewis-skelly.html" style="color:#fcd34d; font-weight:bold;">Myles Lewis-Skelly</a></td><td>Defender</td></tr>
-      <tr><td>8</td><td><a href="odegaard.html" style="color:#fcd34d; font-weight:bold;">Martin Ødegaard</a></td><td>Midfielder</td></tr>
-      <tr><td>16</td><td><a href="norgaard.html" style="color:#fcd34d; font-weight:bold;">Christian Nørgaard</a></td><td>Midfielder</td></tr>
-      <tr><td>23</td><td><a href="merino.html" style="color:#fcd34d; font-weight:bold;">Mikel Merino</a></td><td>Midfielder</td></tr>
-      <tr><td>28</td><td><a href="lokonga.html" style="color:#fcd34d; font-weight:bold;">Albert Sambi Lokonga</a></td><td>Midfielder</td></tr>
-      <tr><td>36</td><td><a href="zubimendi.html" style="color:#fcd34d; font-weight:bold;">Martin Zubimendi</a></td><td>Midfielder</td></tr>
-      <tr><td>41</td><td><a href="rice.html" style="color:#fcd34d; font-weight:bold;">Declan Rice</a></td><td>Midfielder</td></tr>
-      <tr><td>7</td><td><a href="saka.html" style="color:#fcd34d; font-weight:bold;">Bukayo Saka</a></td><td>Forward</td></tr>
-      <tr><td>9</td><td><a href="jesus.html" style="color:#fcd34d; font-weight:bold;">Gabriel Jesus</a></td><td>Forward</td></tr>
-      <tr><td>11</td><td><a href="martinelli.html" style="color:#fcd34d; font-weight:bold;">Gabriel Martinelli</a></td><td>Forward</td></tr>
-      <tr><td>14</td><td><a href="gyokeres.html" style="color:#fcd34d; font-weight:bold;">Viktor Gyökeres</a></td><td>Forward</td></tr>
-      <tr><td>19</td><td><a href="trossard.html" style="color:#fcd34d; font-weight:bold;">Leandro Trossard</a></td><td>Forward</td></tr>
-      <tr><td>20</td><td><a href="madueke.html" style="color:#fcd34d; font-weight:bold;">Noni Madueke</a></td><td>Forward</td></tr>
-      <tr><td>21</td><td><a href="vieira.html" style="color:#fcd34d; font-weight:bold;">Fabio Vieira</a></td><td>Forward</td></tr>
-      <tr><td>22</td><td><a href="nwaneri.html" style="color:#fcd34d; font-weight:bold;">Ethan Nwaneri</a></td><td>Forward</td></tr>
-      <tr><td>24</td><td><a href="nelson.html" style="color:#fcd34d; font-weight:bold;">Reiss Nelson</a></td><td>Forward</td></tr>
-      <tr><td>29</td><td><a href="havertz.html" style="color:#fcd34d; font-weight:bold;">Kai Havertz</a></td><td>Forward</td></tr>
-    </table>
+    <!-- SQUAD -->
+    <div class="section-header">👕 Arsenal Squad 2025/26</div>
 
+    <div class="position-label">Goalkeepers</div>
+    <div class="squad-grid">
+      <a href="raya.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p154561.png" alt="Raya"><div class="info"><div class="name">David Raya</div><div class="number">#1</div></div></a>
+      <a href="kepa.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p109745.png" alt="Kepa"><div class="info"><div class="name">Kepa Arrizabalaga</div><div class="number">#13</div></div></a>
+      <a href="hein.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p463748.png" alt="Hein"><div class="info"><div class="name">Karl Hein</div><div class="number">#31</div></div></a>
+    </div>
+
+    <div class="position-label">Defenders</div>
+    <div class="squad-grid">
+      <a href="saliba.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p462424.png" alt="Saliba"><div class="info"><div class="name">William Saliba</div><div class="number">#2</div></div></a>
+      <a href="mosquera.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p500040.png" alt="Mosquera"><div class="info"><div class="name">Cristhian Mosquera</div><div class="number">#3</div></div></a>
+      <a href="white.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p198869.png" alt="White"><div class="info"><div class="name">Ben White</div><div class="number">#4</div></div></a>
+      <a href="gabriel.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p226597.png" alt="Gabriel"><div class="info"><div class="name">Gabriel</div><div class="number">#6</div></div></a>
+      <a href="timber.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p445122.png" alt="Timber"><div class="info"><div class="name">Jurrien Timber</div><div class="number">#12</div></div></a>
+      <a href="kiwior.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p440854.png" alt="Kiwior"><div class="info"><div class="name">Jakub Kiwior</div><div class="number">#15</div></div></a>
+      <a href="zinchenko.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p206325.png" alt="Zinchenko"><div class="info"><div class="name">Oleksandr Zinchenko</div><div class="number">#17</div></div></a>
+      <a href="calafiori.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p466075.png" alt="Calafiori"><div class="info"><div class="name">Riccardo Calafiori</div><div class="number">#33</div></div></a>
+      <a href="lewis-skelly.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p499169.png" alt="Lewis-Skelly"><div class="info"><div class="name">Myles Lewis-Skelly</div><div class="number">#49</div></div></a>
+    </div>
+
+    <div class="position-label">Midfielders</div>
+    <div class="squad-grid">
+      <a href="odegaard.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p184029.png" alt="Odegaard"><div class="info"><div class="name">Martin Ødegaard</div><div class="number">#8 · Captain</div></div></a>
+      <a href="norgaard.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p128295.png" alt="Norgaard"><div class="info"><div class="name">Christian Nørgaard</div><div class="number">#16</div></div></a>
+      <a href="merino.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p195384.png" alt="Merino"><div class="info"><div class="name">Mikel Merino</div><div class="number">#23</div></div></a>
+      <a href="lokonga.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p437742.png" alt="Lokonga"><div class="info"><div class="name">Albert Sambi Lokonga</div><div class="number">#28</div></div></a>
+      <a href="zubimendi.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p481655.png" alt="Zubimendi"><div class="info"><div class="name">Martin Zubimendi</div><div class="number">#36</div></div></a>
+      <a href="rice.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p204480.png" alt="Rice"><div class="info"><div class="name">Declan Rice</div><div class="number">#41</div></div></a>
+    </div>
+
+    <div class="position-label">Forwards</div>
+    <div class="squad-grid">
+      <a href="saka.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p223340.png" alt="Saka"><div class="info"><div class="name">Bukayo Saka</div><div class="number">#7</div></div></a>
+      <a href="jesus.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p205651.png" alt="Jesus"><div class="info"><div class="name">Gabriel Jesus</div><div class="number">#9</div></div></a>
+      <a href="martinelli.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p444145.png" alt="Martinelli"><div class="info"><div class="name">Gabriel Martinelli</div><div class="number">#11</div></div></a>
+      <a href="gyokeres.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p224117.png" alt="Gyokeres"><div class="info"><div class="name">Viktor Gyökeres</div><div class="number">#14</div></div></a>
+      <a href="trossard.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p116216.png" alt="Trossard"><div class="info"><div class="name">Leandro Trossard</div><div class="number">#19</div></div></a>
+      <a href="madueke.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p248857.png" alt="Madueke"><div class="info"><div class="name">Noni Madueke</div><div class="number">#20</div></div></a>
+      <a href="vieira.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p438098.png" alt="Vieira"><div class="info"><div class="name">Fabio Vieira</div><div class="number">#21</div></div></a>
+      <a href="nwaneri.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p499175.png" alt="Nwaneri"><div class="info"><div class="name">Ethan Nwaneri</div><div class="number">#22</div></div></a>
+      <a href="nelson.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p200641.png" alt="Nelson"><div class="info"><div class="name">Reiss Nelson</div><div class="number">#24</div></div></a>
+      <a href="havertz.html" class="player-card"><img src="https://resources.premierleague.com/premierleague/photos/players/250x250/p219847.png" alt="Havertz"><div class="info"><div class="name">Kai Havertz</div><div class="number">#29</div></div></a>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Made by Shepherd &middot; 2026
   </div>
 
 </body>

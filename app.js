@@ -6,13 +6,15 @@
 // API configuration
 var API_BASE = 'https://api.football-data.org/v4';
 var API_KEY  = '5eb54d3597134ddf88581ef5f582dc5d'; // Free key from football-data.org
+var CORS_PROXY = 'https://corsproxy.io/?url='; // Needed because the API doesn't allow browser requests directly
 var ARSENAL_ID = 57;
 var PL_CODE = 'PL';
 
 // ── FETCH WRAPPER ──
-// Adds the API key header to every request
+// Routes through a CORS proxy so the browser allows the request
 function fetchAPI(endpoint) {
-  return fetch(API_BASE + endpoint, {
+  var url = CORS_PROXY + encodeURIComponent(API_BASE + endpoint);
+  return fetch(url, {
     headers: { 'X-Auth-Token': API_KEY }
   }).then(function(response) {
     if (!response.ok) {

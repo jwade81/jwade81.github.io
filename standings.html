@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premier League Standings - Shepherd's Arsenal Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #0a0e1a;
+      color: #e8e8e8;
+      min-height: 100vh;
+    }
+
+    /* ── NAV BAR ── */
+    .nav {
+      background: linear-gradient(145deg, #141a2e, #1a2240);
+      border-bottom: 1px solid rgba(156,130,74,0.2);
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+    .nav-link {
+      color: #c8c8d0;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 3px solid transparent;
+      transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .nav-link:hover { color: #EF0107; }
+    .nav-link.active { color: #EF0107; border-bottom-color: #EF0107; }
+
+    /* ── HERO BANNER ── */
+    .hero {
+      background: linear-gradient(135deg, #6b0004 0%, #EF0107 40%, #c20006 100%);
+      padding: 50px 20px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 4px solid #9C824A;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><text y='70' font-size='65' opacity='0.06'>⚽</text></svg>") repeat;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 900;
+      color: white;
+      position: relative;
+      z-index: 1;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+
+    .hero .subtitle {
+      font-size: 18px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 10px;
+      position: relative;
+      z-index: 1;
+      font-weight: 400;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      font-size: 26px;
+      font-weight: 800;
+      color: white;
+      margin: 36px 0 16px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #EF0107;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── STANDINGS TABLE ── */
+    .standings-card {
+      background: linear-gradient(145deg, #141a2e, #1a2240);
+      border: 1px solid rgba(156,130,74,0.15);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th {
+      background: rgba(239,1,7,0.15);
+      color: #EF0107;
+      padding: 14px 18px;
+      text-align: left;
+      font-weight: 700;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    td {
+      padding: 13px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: #c8c8d0;
+    }
+
+    tr:hover td {
+      background: rgba(239,1,7,0.06);
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center;
+      padding: 30px;
+      color: #555;
+      font-size: 13px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="standings.html" class="nav-link active">Standings</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h1>Premier League Standings</h1>
+    <p class="subtitle">2025/26 Season Table</p>
+  </div>
+
+  <div class="main">
+
+    <div class="section-header">🏆 Premier League Table 2025/26</div>
+    <div class="standings-card">
+      <table>
+        <thead>
+          <tr>
+            <th style="text-align:center;width:50px;">#</th>
+            <th>Team</th>
+            <th style="text-align:center;">P</th>
+            <th style="text-align:center;">W</th>
+            <th style="text-align:center;">D</th>
+            <th style="text-align:center;">L</th>
+            <th style="text-align:center;">GD</th>
+            <th style="text-align:center;">Pts</th>
+          </tr>
+        </thead>
+        <tbody id="standings-body">
+          <!-- Loaded by app.js -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Made by Shepherd &middot; 2026
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

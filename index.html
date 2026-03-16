@@ -222,9 +222,38 @@
       font-size: 13px;
       border-top: 1px solid rgba(255,255,255,0.05);
     }
+
+    /* ── NAV BAR ── */
+    .nav {
+      background: linear-gradient(145deg, #141a2e, #1a2240);
+      border-bottom: 1px solid rgba(156,130,74,0.2);
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+    .nav-link {
+      color: #c8c8d0;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 3px solid transparent;
+      transition: color 0.2s, border-bottom-color 0.2s;
+    }
+    .nav-link:hover { color: #EF0107; }
+    .nav-link.active { color: #EF0107; border-bottom-color: #EF0107; }
   </style>
 </head>
 <body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="standings.html" class="nav-link">Standings</a>
+  </nav>
 
   <!-- HERO -->
   <div class="hero">
@@ -249,13 +278,10 @@
     <div class="section-header">📅 Next 5 Matches</div>
     <div class="fixtures-card">
       <table>
-        <tr><th>Date</th><th>Opponent</th><th>Venue</th></tr>
-        <tr><td>Sat, 14 Mar 2026</td><td>Everton</td><td class="home-tag">HOME</td></tr>
-        <tr><td>Sat, 21 Mar 2026</td><td>Wolverhampton</td><td class="away-tag">AWAY</td></tr>
-        <tr><td>Sat, 11 Apr 2026</td><td>Bournemouth</td><td class="home-tag">HOME</td></tr>
-        <tr><td>Sat, 18 Apr 2026</td><td>Manchester City</td><td class="away-tag">AWAY</td></tr>
-        <tr><td>Sat, 25 Apr 2026</td><td>Newcastle United</td><td class="home-tag">HOME</td></tr>
+        <thead><tr><th>Date</th><th>Opponent</th><th>Venue</th></tr></thead>
+        <tbody id="fixtures-body"><!-- Loaded by app.js --></tbody>
       </table>
+      <div id="fixtures-notice" style="display:none;text-align:center;padding:8px;font-size:12px;color:#9C824A;"></div>
     </div>
 
     <!-- SQUAD -->
@@ -311,5 +337,6 @@
     Made by Shepherd &middot; 2026
   </div>
 
+  <script src="app.js"></script>
 </body>
 </html>

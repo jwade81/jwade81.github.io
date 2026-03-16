@@ -1,28 +1,12 @@
 // ============================
 // Shepherd's Arsenal Hub - Live Data
-// Uses football-data.org free API
+// Uses ESPN's free public API (no API key needed!)
 // ============================
 
-// API configuration
-var API_BASE = 'https://api.football-data.org/v4';
-var API_KEY  = '5eb54d3597134ddf88581ef5f582dc5d'; // Free key from football-data.org
-var CORS_PROXY = 'https://corsproxy.io/?url='; // Needed because the API doesn't allow browser requests directly
-var ARSENAL_ID = 57;
-var PL_CODE = 'PL';
-
-// ── FETCH WRAPPER ──
-// Routes through a CORS proxy so the browser allows the request
-function fetchAPI(endpoint) {
-  var url = CORS_PROXY + encodeURIComponent(API_BASE + endpoint);
-  return fetch(url, {
-    headers: { 'X-Auth-Token': API_KEY }
-  }).then(function(response) {
-    if (!response.ok) {
-      throw new Error('API request failed: ' + response.status);
-    }
-    return response.json();
-  });
-}
+// ESPN API endpoints
+var FIXTURES_URL = 'https://site.api.espn.com/apis/site/v2/sports/soccer/eng.1/teams/359/schedule?fixture=true';
+var STANDINGS_URL = 'https://site.api.espn.com/apis/v2/sports/soccer/eng.1/standings';
+var ARSENAL_ESPN_ID = '359';
 
 // ── DATE FORMATTING ──
 // Converts "2026-03-14T15:00:00Z" into "Sat, 14 Mar 2026"
@@ -38,17 +22,16 @@ function formatMatchDate(utcDateString) {
 }
 
 // ── FALLBACK FIXTURE DATA ──
-// Shown if the API is down or the key hasn't been set yet
+// Shown if the API is down
 var FALLBACK_FIXTURES = [
-  { date: 'Sat, 14 Mar 2026', opponent: 'Everton',          venue: 'HOME' },
-  { date: 'Sat, 21 Mar 2026', opponent: 'Wolverhampton',    venue: 'AWAY' },
-  { date: 'Sat, 11 Apr 2026', opponent: 'Bournemouth',      venue: 'HOME' },
-  { date: 'Sat, 18 Apr 2026', opponent: 'Manchester City',  venue: 'AWAY' },
-  { date: 'Sat, 25 Apr 2026', opponent: 'Newcastle United', venue: 'HOME' }
+  { date: 'Sat, 11 Apr 2026', opponent: 'AFC Bournemouth',  venue: 'HOME' },
+  { date: 'Sat, 19 Apr 2026', opponent: 'Manchester City',  venue: 'AWAY' },
+  { date: 'Sat, 25 Apr 2026', opponent: 'Newcastle United', venue: 'HOME' },
+  { date: 'Sat, 2 May 2026',  opponent: 'Fulham',           venue: 'HOME' },
+  { date: 'Sat, 9 May 2026',  opponent: 'West Ham United',  venue: 'AWAY' }
 ];
 
 // ── RENDER FIXTURE ROWS ──
-// Takes an array of { date, opponent, venue } and puts them in the table
 function renderFixtureRows(container, fixtures) {
   container.innerHTML = '';
   fixtures.forEach(function(match) {
@@ -62,31 +45,57 @@ function renderFixtureRows(container, fixtures) {
   });
 }
 
+// ── HELPER: get a stat value from ESPN stats array ──
+function getStat(stats, statName) {
+  for (var i = 0; i < stats.length; i++) {
+    if (stats[i].name === statName) {
+      return stats[i].displayValue;
+    }
+  }
+  return '0';
+}
+
 // ── LOAD FIXTURES (index.html) ──
 function loadFixtures() {
   var container = document.getElementById('fixtures-body');
-  if (!container) return; // Not on the fixtures page
+  if (!container) return;
 
   // Show loading state
   container.innerHTML =
     '<tr><td colspan="3" style="text-align:center;padding:24px;color:#9C824A;">' +
     'Loading fixtures...</td></tr>';
 
-  fetchAPI('/teams/' + ARSENAL_ID + '/matches?status=SCHEDULED&limit=5')
+  fetch(FIXTURES_URL)
+    .then(function(response) {
+      if (!response.ok) throw new Error('API request failed: ' + response.status);
+      return response.json();
+    })
     .then(function(data) {
-      var matches = data.matches;
-      if (!matches || matches.length === 0) {
+      var events = data.events;
+      if (!events || events.length === 0) {
         throw new Error('No upcoming matches found');
       }
 
-      // Convert API data into our simple format
-      var fixtures = matches.map(function(match) {
-        var isHome   = match.homeTeam.id === ARSENAL_ID;
+      // Only show first 5 upcoming matches
+      var fixtures = events.slice(0, 5).map(function(event) {
+        var comp = event.competitions[0];
+        var competitors = comp.competitors;
+
+        // Find home and away teams
+        var homeTeam = null;
+        var awayTeam = null;
+        for (var i = 0; i < competitors.length; i++) {
+          if (competitors[i].homeAway === 'home') homeTeam = competitors[i];
+          if (competitors[i].homeAway === 'away') awayTeam = competitors[i];
+        }
+
+        var isHome = homeTeam && homeTeam.team.id === ARSENAL_ESPN_ID;
         var opponent = isHome
-          ? (match.awayTeam.shortName || match.awayTeam.name)
-          : (match.homeTeam.shortName || match.homeTeam.name);
+          ? (awayTeam.team.shortDisplayName || awayTeam.team.displayName)
+          : (homeTeam.team.shortDisplayName || homeTeam.team.displayName);
+
         return {
-          date:     formatMatchDate(match.utcDate),
+          date:     formatMatchDate(event.date),
           opponent: opponent,
           venue:    isHome ? 'HOME' : 'AWAY'
         };
@@ -98,7 +107,6 @@ function loadFixtures() {
       console.warn('Fixtures API failed, using fallback data:', error);
       renderFixtureRows(container, FALLBACK_FIXTURES);
 
-      // Show a subtle notice that we're using cached data
       var notice = document.getElementById('fixtures-notice');
       if (notice) {
         notice.textContent = '(Showing cached fixtures \u2014 live data unavailable)';
@@ -110,29 +118,43 @@ function loadFixtures() {
 // ── LOAD STANDINGS (standings.html) ──
 function loadStandings() {
   var container = document.getElementById('standings-body');
-  if (!container) return; // Not on the standings page
+  if (!container) return;
 
   // Show loading state
   container.innerHTML =
     '<tr><td colspan="8" style="text-align:center;padding:24px;color:#9C824A;">' +
     'Loading standings...</td></tr>';
 
-  fetchAPI('/competitions/' + PL_CODE + '/standings')
+  fetch(STANDINGS_URL)
+    .then(function(response) {
+      if (!response.ok) throw new Error('API request failed: ' + response.status);
+      return response.json();
+    })
     .then(function(data) {
-      // Find the TOTAL standings (not HOME or AWAY splits)
-      var totalStandings = data.standings.find(function(s) {
-        return s.type === 'TOTAL';
-      });
-
-      if (!totalStandings || !totalStandings.table) {
+      var entries = data.children[0].standings.entries;
+      if (!entries || entries.length === 0) {
         throw new Error('No standings data found');
       }
 
+      // Sort by rank
+      entries.sort(function(a, b) {
+        return parseInt(getStat(a.stats, 'rank')) - parseInt(getStat(b.stats, 'rank'));
+      });
+
       container.innerHTML = '';
 
-      totalStandings.table.forEach(function(entry) {
+      entries.forEach(function(entry) {
         var row = document.createElement('tr');
-        var isArsenal = entry.team.id === ARSENAL_ID;
+        var isArsenal = entry.team.id === ARSENAL_ESPN_ID;
+        var rank = getStat(entry.stats, 'rank');
+        var played = getStat(entry.stats, 'gamesPlayed');
+        var wins = getStat(entry.stats, 'wins');
+        var draws = getStat(entry.stats, 'ties');
+        var losses = getStat(entry.stats, 'losses');
+        var gd = getStat(entry.stats, 'pointDifferential');
+        var points = getStat(entry.stats, 'points');
+        var logo = entry.team.logos[0].href;
+        var teamName = entry.team.displayName;
 
         // Highlight Arsenal's row
         if (isArsenal) {
@@ -142,22 +164,22 @@ function loadStandings() {
 
         var posStyle = 'text-align:center;' + (isArsenal ? 'color:#EF0107;font-weight:800;' : '');
         var ptsStyle = 'text-align:center;font-weight:700;' + (isArsenal ? 'color:#EF0107;' : 'color:#e8e8e8;');
-        var teamName = isArsenal
-          ? '<strong style="color:#EF0107;">' + entry.team.shortName + '</strong>'
-          : entry.team.shortName;
+        var nameHtml = isArsenal
+          ? '<strong style="color:#EF0107;">' + teamName + '</strong>'
+          : teamName;
 
         row.innerHTML =
-          '<td style="' + posStyle + '">' + entry.position + '</td>' +
+          '<td style="' + posStyle + '">' + rank + '</td>' +
           '<td>' +
-            '<img src="' + entry.team.crest + '" alt="" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">' +
-            teamName +
+            '<img src="' + logo + '" alt="" style="width:20px;height:20px;vertical-align:middle;margin-right:8px;">' +
+            nameHtml +
           '</td>' +
-          '<td style="text-align:center;">' + entry.playedGames + '</td>' +
-          '<td style="text-align:center;">' + entry.won + '</td>' +
-          '<td style="text-align:center;">' + entry.draw + '</td>' +
-          '<td style="text-align:center;">' + entry.lost + '</td>' +
-          '<td style="text-align:center;">' + entry.goalDifference + '</td>' +
-          '<td style="' + ptsStyle + '">' + entry.points + '</td>';
+          '<td style="text-align:center;">' + played + '</td>' +
+          '<td style="text-align:center;">' + wins + '</td>' +
+          '<td style="text-align:center;">' + draws + '</td>' +
+          '<td style="text-align:center;">' + losses + '</td>' +
+          '<td style="text-align:center;">' + gd + '</td>' +
+          '<td style="' + ptsStyle + '">' + points + '</td>';
 
         container.appendChild(row);
       });
@@ -172,7 +194,6 @@ function loadStandings() {
 }
 
 // ── INIT ──
-// Run the right loader when the page finishes loading
 document.addEventListener('DOMContentLoaded', function() {
   loadFixtures();
   loadStandings();

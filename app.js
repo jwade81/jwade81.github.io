@@ -5,7 +5,7 @@
 
 // API configuration
 var API_BASE = 'https://api.football-data.org/v4';
-var API_KEY  = 'YOUR_API_KEY_HERE'; // Get your free key at football-data.org/client/register
+var API_KEY  = '5eb54d3597134ddf88581ef5f582dc5d'; // Free key from football-data.org
 var ARSENAL_ID = 57;
 var PL_CODE = 'PL';
 
